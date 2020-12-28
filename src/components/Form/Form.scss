@@ -1,0 +1,59 @@
+@import '../../mixins.scss';
+@import '../../colors.scss';
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 70px 20px 25px 10%;
+  gap: 36px;
+  @include size('large') {
+    gap: 18px;
+    .field {
+      padding-bottom: 15px;
+    }
+  }
+  .field {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 262px;
+    padding-bottom: 25px;
+    label {
+      margin-bottom: 5px;
+      font-size: 18px;
+      line-height: 22px;
+      letter-spacing: 0.01em;
+      color: $black;
+    }
+    input[type='text'] {
+      background: $white;
+      border: 2px solid $brown;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      height: 46px;
+      padding: 0 15px;
+      outline: none;
+    }
+    .error-message {
+      color: $orange;
+      font-size: 12px;
+      position: absolute;
+      bottom: 0;
+    }
+  }
+  .submit-button {
+    cursor: pointer;
+    min-width: 151px;
+    border: 2px solid $brown;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 11px 15px;
+    color: $white;
+    background: $orange;
+    border-radius: 12px;
+    outline: none;
+    height: 50px;
+    margin-bottom: 3px;
+  }
+}

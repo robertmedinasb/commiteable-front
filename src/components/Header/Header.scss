@@ -1,0 +1,70 @@
+@import '../../colors.scss';
+@import '../../mixins.scss';
+
+.header {
+  display: flex;
+  padding: 20px 10%;
+  align-items: flex-end;
+  position: relative;
+  background: $orange;
+  height: 65px;
+  gap: 40px;
+  border: 2px solid $black;
+  @include size('medium') {
+    flex-direction: column;
+    height: auto;
+    padding: 20px 2%;
+    text-align: center;
+    justify-content: center;
+    justify-content: center;
+    height: auto;
+  }
+  .header-section {
+    @include size('medium') {
+      width: 100%;
+    }
+    &:first-of-type {
+      width: 32%;
+      min-width: 350px;
+      display: flex;
+      flex-direction: row-reverse;
+      @include size('medium') {
+        flex-direction: row;
+        align-items: flex-end;
+        min-width: initial;
+      }
+    }
+    span {
+      font-size: 18px;
+      line-height: 22px;
+      color: $white;
+      @include size('medium') {
+        font-size: 15px;
+        line-height: 20px;
+      }
+    }
+    h1 {
+      color: $white;
+      font-size: 30px;
+      line-height: 37px;
+      @include size('medium') {
+        font-size: 20px;
+        line-height: 27px;
+      }
+    }
+  }
+  .header-logo {
+    position: absolute;
+    left: 10%;
+    top: 50%;
+    width: 15%;
+    min-width: 180px;
+    img {
+      width: 100%;
+    }
+    @include size('medium') {
+      top: 20px;
+      left: 20px;
+    }
+  }
+}
