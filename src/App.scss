@@ -1,5 +1,10 @@
 @import './mixins.scss';
 
+$orange: #ff8a42;
+$brown: #261703;
+$black: #000000;
+$white: #ffffff;
+
 * {
   font-family: 'Wellfleet', cursive;
   margin: 0;
@@ -11,10 +16,10 @@
   padding: 20px 10%;
   align-items: flex-end;
   position: relative;
-  background: #ff8a42;
+  background: $orange;
   height: 65px;
   gap: 40px;
-  border: 2px solid #000000;
+  border: 2px solid $black;
   @include size('medium') {
     flex-direction: column;
     height: auto;
@@ -42,14 +47,14 @@
     span {
       font-size: 18px;
       line-height: 22px;
-      color: #ffffff;
+      color: $white;
       @include size('medium') {
         font-size: 15px;
         line-height: 20px;
       }
     }
     h1 {
-      color: #ffffff;
+      color: $white;
       font-size: 30px;
       line-height: 37px;
       @include size('medium') {
@@ -97,11 +102,11 @@
       font-size: 18px;
       line-height: 22px;
       letter-spacing: 0.01em;
-      color: #000000;
+      color: $black;
     }
     input[type='text'] {
-      background: #ffffff;
-      border: 2px solid #261703;
+      background: $white;
+      border: 2px solid $brown;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       border-radius: 12px;
       height: 46px;
@@ -109,7 +114,7 @@
       outline: none;
     }
     .error-message {
-      color: #ff8a42;
+      color: $orange;
       font-size: 12px;
       position: absolute;
       bottom: 0;
@@ -118,44 +123,22 @@
   .submit-button {
     cursor: pointer;
     min-width: 151px;
-    border: 2px solid #261703;
+    border: 2px solid $brown;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     padding: 11px 15px;
-    color: #ffffff;
-    background: #ff8a42;
+    color: $white;
+    background: $orange;
     border-radius: 12px;
     outline: none;
     height: 50px;
     margin-bottom: 3px;
   }
 }
-.branch-field {
-  margin: 0 10%;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  label {
-    margin-bottom: 5px;
-    font-size: 18px;
-    line-height: 22px;
-    letter-spacing: 0.01em;
-    color: #000000;
-  }
-  select {
-    background: #ffffff;
-    border: 2px solid #261703;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 12px;
-    height: 35px;
-    padding: 0 15px;
-    outline: none;
-  }
-}
 .graph-container {
   width: 80%;
   margin: 0 auto;
-  background: #261703;
-  border: 3px solid #ff8a42;
+  background: $brown;
+  border: 3px solid;
   box-sizing: border-box;
   border-radius: 15px;
   margin-top: 25px;
@@ -171,9 +154,9 @@
     justify-content: center;
     align-items: center;
     .header-item {
-      border-bottom: 2px solid #ffffff;
-      border-right: 2px solid #ffffff;
-      color: #ffffff;
+      border-bottom: 2px solid$white;
+      border-right: 2px solid$white;
+      color: $white;
       font-size: 18px;
       line-height: 22px;
       letter-spacing: 0.01em;
@@ -192,13 +175,20 @@
       justify-content: center;
       align-items: center;
       height: 50px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+  }
+  .row-0 {
+    .circle::before {
+      display: none;
     }
   }
   .circle {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    border: 2px solid #ffffff;
+    border: 2px solid$white;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -210,7 +200,7 @@
       content: '';
       width: 3px;
       height: 16px;
-      background: #ffffff;
+      background: $white;
       position: absolute;
       bottom: 100%;
     }
@@ -218,19 +208,19 @@
       content: '';
       width: 3px;
       height: 16px;
-      background: #ffffff;
+      background: $white;
       position: absolute;
       top: 100%;
     }
   }
   .commit-row-item {
     padding: 11px 5px;
-    color: #ffffff;
+    color: $white;
     text-align: center;
-    font-size: 13px;
-    line-height: 16px;
+    font-size: 12px;
+    line-height: 14px;
     letter-spacing: 0.01em;
-    color: #ffffff;
+    color: $white;
   }
   .active-commit {
     background: rgba(196, 196, 196, 0.25);
@@ -238,7 +228,7 @@
     .check {
       width: 18px;
       height: 18px;
-      background: #ff8a42;
+      background: $orange;
       border-radius: 50%;
     }
     .commit-details {
@@ -249,15 +239,16 @@
         display: flex;
         flex-direction: column;
         padding-left: 1%;
-        border-left: 1px solid #ffffff;
+        border-left: 1px solid$white;
       }
       .title {
         padding-left: 1%;
         padding-top: 31px;
-        border-left: 1px solid #ffffff;
+        border-left: 1px solid$white;
+        width: 65%;
       }
       span {
-        color: #ffffff;
+        color: $white;
         font-size: 13px;
         line-height: 16px;
         display: flex;
@@ -265,11 +256,19 @@
         letter-spacing: 0.01em;
         padding: 5px;
       }
+      a {
+        color: $white;
+        margin-left: 2px;
+      }
     }
   }
 
   .description {
     text-align: left;
     padding-left: 10px;
+    width: 95%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }

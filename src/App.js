@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.scss';
 import logoImg from './commiteable.png';
+import { getCommits } from './api';
+import moment from 'moment';
 
 function App() {
   const [repo, setRepo] = useState('');
@@ -8,20 +10,27 @@ function App() {
   const [submitted, setSubmitted] = useState(false);
   const [errorRepo, setErrorRepo] = useState(null);
   const [errorOwner, setErrorOwner] = useState(null);
-  const [branches, setBranches] = useState([]);
+  const [commits, setCommits] = useState(null);
+  const [commitSelected, setCommitSelected] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     validateOwner();
     validateRepo();
+    setSubmitted(true);
     if (!errorOwner & !errorRepo) {
-      setSubmitted(true);
-      alert(JSON.stringify({ repo, owner }));
+      try {
+        const { commits } = await getCommits({ owner, repo });
+        setSubmitted(false);
+        setCommits(commits);
+        if (!commits) setErrorRepo('Something went wrong, please try again :(');
+      } catch (error) {
+        setErrorRepo('Something went wrong, please try again :(');
+      }
     }
   };
 
   const handleBlur = (e) => {
-    console.log(e);
     if (e.target.name === 'owner') validateOwner();
     if (e.target.name === 'repo') validateRepo();
   };
@@ -34,10 +43,22 @@ function App() {
   };
 
   const validateRepo = () => {
-    if (!/\w{3,}/.test(owner)) {
+    if (!/\w{3,}/.test(repo)) {
       return setErrorRepo('Must be valid and have at least 3 chars');
     }
     return setErrorRepo(null);
+  };
+
+  const getFirstEight = (sha) => {
+    return sha.substr(0, 8);
+  };
+
+  const getParents = (parents) => {
+    const newArr = parents.map(({ sha }) => {
+      return getFirstEight(sha);
+    });
+    if (newArr.length > 0) return newArr.join(', ');
+    return 'None';
   };
 
   return (
@@ -82,12 +103,6 @@ function App() {
           Search
         </button>
       </form>
-      <div className='branch-field'>
-        <label>Branch:</label>
-        <select>
-          <option>Master</option>
-        </select>
-      </div>
       <div className='graph-container'>
         <div className='container-header'>
           <div className='header-item'>Graph</div>
@@ -96,46 +111,57 @@ function App() {
           <div className='header-item'>Author</div>
           <div className='header-item'>Commit</div>
         </div>
-        <div className='commit-row'>
-          <div className='row'>
-            <div className='circle'>
-              <div className='check'></div>
+        {commits &&
+          commits.map(({ commit, sha, html_url, parents }, index) => (
+            <div
+              className={`commit-row row-${index} ${
+                commitSelected === commit && 'active-commit'
+              }`}
+              key={index}
+              onClick={() => setCommitSelected(commit)}
+            >
+              <div className='row'>
+                <div className='circle'>
+                  <div className='check'></div>
+                </div>
+                <div
+                  className='commit-row-item description'
+                  title={commit.message}
+                >
+                  {commit.message}
+                </div>
+                <div className='commit-row-item'>
+                  {moment(commit.author.date).format('lll')}
+                </div>
+                <div className='commit-row-item'>{commit.author.name}</div>
+                <div className='commit-row-item'>{getFirstEight(sha)}</div>
+              </div>
+              {commitSelected === commit && (
+                <div className='commit-details'>
+                  <div className='details'>
+                    <span>Commit: {sha}</span>
+                    <span>Parents: {getParents(parents)}</span>
+                    <span>
+                      Commiter: {commit.author.name}{' '}
+                      {`<${commit.author.email}>`}
+                    </span>
+                    <span>
+                      Date:{' '}
+                      {moment(commit.author.date).format(
+                        'MMMM Do YYYY, h:mm:ss a'
+                      )}
+                    </span>
+                    <span>
+                      Github URL: <a href={html_url}> {html_url}</a>
+                    </span>
+                  </div>
+                  <div className='title'>
+                    <span>{commit.message}</span>
+                  </div>
+                </div>
+              )}
             </div>
-            <div className='commit-row-item description'>
-              Initialize project using Create React App
-            </div>
-            <div className='commit-row-item'>27 Dec 2020 19:54</div>
-            <div className='commit-row-item'>Robert Medina</div>
-            <div className='commit-row-item'>fff21d41</div>
-          </div>
-        </div>
-        <div className='commit-row active-commit'>
-          <div className='row'>
-            <div className='circle'>
-              <div className='check'></div>
-            </div>
-            <div className='commit-row-item description'>
-              Initialize project using Create React App
-            </div>
-            <div className='commit-row-item'>27 Dec 2020 19:54</div>
-            <div className='commit-row-item'>Robert Medina</div>
-            <div className='commit-row-item'>fff21d41</div>
-          </div>
-
-          <div className='commit-details'>
-            <div className='details'>
-              <span>Commit: fff21d418e0ce50dbfe23cad653ee6084b94cdee</span>
-              <span>Parents: None</span>
-              <span>{'Commiter: Robert Medina <robert@fitco.com.pe>'}</span>
-              <span>
-                {'Date: Sun Dec 27 2020 12:03:57 GMT-0500 (Peru Standard Time)'}
-              </span>
-            </div>
-            <div className='title'>
-              <span>Initialize project using Create React App</span>
-            </div>
-          </div>
-        </div>
+          ))}
       </div>
     </div>
   );
